@@ -16,15 +16,23 @@ int run(std::string program) {
             case '<': ptr--; break;
             case '.': std::putchar(*ptr); break;
             case ',': *ptr = std::getchar(); break;
-            case '[': stack.push(i); break;
+            case '[':
+                if (*ptr == 0) {
+                    while (!stack.empty()) {
+                        if (program[i] == '[') stack.push(i);
+                        if (program[i] == ']') stack.pop();
+                        i++;
+                    }
+                } else stack.push(i);
+
+                break;
             case ']':
                 if (*ptr == 0) {
                     stack.pop();
-                    continue;
                 } else {
                     i = stack.top();
-                    break;
                 }
+                break;
         }
     }
     return 0;
@@ -52,6 +60,5 @@ int main(int argc, const char* argv[]) {
 
     std::string program = read_file(argv[1]);
     run(program);
-
     return 0;
 }
